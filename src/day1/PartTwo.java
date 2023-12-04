@@ -23,7 +23,7 @@ What is the sum of all of the calibration values?
 
 public class PartTwo {
 
-    private static String input = """
+    private static final String input = """
             two1nine
             eightwothree
             abcone2threexyz
@@ -48,13 +48,13 @@ public class PartTwo {
                 String letterNumber = String.valueOf(str.charAt(i));
                 while (j < str.length()) {
                     letterNumber += String.valueOf(str.charAt(j));
-                    if (!"".equals(letterNumberToNumber(letterNumber))) {
+                    if (!letterNumberToNumber(letterNumber).isEmpty()) {
                         tmp += letterNumberToNumber(letterNumber);
                         break;
                     }
                     j++;
                 }
-                if(tmp.length() == 1){
+                if (tmp.length() == 1) {
                     break;
                 }
             }
@@ -66,16 +66,16 @@ public class PartTwo {
                 int j = i - 1;
                 StringBuilder letterNumber = new StringBuilder(String.valueOf(str.charAt(i)));
                 while (j >= 0) {
-                    letterNumber.append(String.valueOf(str.charAt(j)));
-                    if (!"".equals(letterNumberToNumber(letterNumber.reverse().toString()))) {
+                    letterNumber.append(str.charAt(j));
+                    if (!letterNumberToNumber(letterNumber.reverse().toString()).isEmpty()) {
                         tmp += letterNumberToNumber(letterNumber.toString());
                         break;
-                    }else{
+                    } else {
                         letterNumber.reverse();
                     }
                     j--;
                 }
-                if(tmp.length() == 2){
+                if (tmp.length() == 2) {
                     break;
                 }
             }
@@ -85,30 +85,19 @@ public class PartTwo {
     }
 
     public static String letterNumberToNumber(String str) {
-        switch (str) {
-            case "one":
-                return "1";
-            case "two":
-                return "2";
-            case "three":
-                return "3";
-            case "four":
-                return "4";
-            case "five":
-                return "5";
-            case "six":
-                return "6";
-            case "seven":
-                return "7";
-            case "eight":
-                return "8";
-            case "nine":
-                return "9";
-            case "zero":
-                return "0";
-            default:
-                return "";
-        }
+        return switch (str) {
+            case "one" -> "1";
+            case "two" -> "2";
+            case "three" -> "3";
+            case "four" -> "4";
+            case "five" -> "5";
+            case "six" -> "6";
+            case "seven" -> "7";
+            case "eight" -> "8";
+            case "nine" -> "9";
+            case "zero" -> "0";
+            default -> "";
+        };
     }
 
     public static void main(String[] args) {
