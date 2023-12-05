@@ -35,7 +35,70 @@ For each game, find the minimum set of cubes that must have been present.
 
 public class PartTwo {
 
+    public static String input = """
+                Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+                            Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
+                            Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
+                            Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
+                            Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
+            """;
+
     public static Long cubeConundrum(String input) {
-        return null;
+        String[] arr = input.split("\n");
+        Long sum = 0L;
+
+        for (String str : arr) {
+            String number = "";
+            String color = "";
+            int red_min = Integer.MIN_VALUE;
+            int blue_min = Integer.MIN_VALUE;
+            int green_min = Integer.MIN_VALUE;
+            int tmp = 0;
+            for (int i = 0; i < str.length(); i++) {
+                if (str.charAt(i) == ':') {
+                    tmp = i + 2;
+                    break;
+                }
+            }
+
+            for (int i = tmp; i < str.length(); i++) {
+                if (Character.isDigit(str.charAt(i))) {
+                    number += str.charAt(i);
+                    if (Character.isDigit(str.charAt(i + 1))) {
+                        number += str.charAt(i + 1);
+                        i++;
+                    }
+                } else if (Character.isLetter(str.charAt(i))) {
+                    color += str.charAt(i);
+                }
+
+                switch (color) {
+                    case "r" -> {
+                        red_min = Math.max(Integer.parseInt(number), red_min);
+                        color = "";
+                        number = "";
+                        i += 3;
+                    }
+                    case "b" -> {
+                        blue_min = Math.max(Integer.parseInt(number), blue_min);
+                        color = "";
+                        number = "";
+                        i += 4;
+                    }
+                    case "g" -> {
+                        green_min = Math.max(Integer.parseInt(number), green_min);
+                        color = "";
+                        number = "";
+                        i += 5;
+                    }
+                }
+            }
+            sum += red_min * blue_min * green_min;
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(cubeConundrum(PartOne.input));
     }
 }
