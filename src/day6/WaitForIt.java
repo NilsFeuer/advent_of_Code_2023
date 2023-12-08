@@ -1,5 +1,7 @@
 package day6;
 
+import util.InputUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +22,8 @@ public class WaitForIt {
     //Part One
     public static int waitForIt(String input) {
         String[] arr = input.split("\n");
+
+        List<String> inputList = InputUtil.readInput("day6.txt");
 
         int speed;
         int distance = 0;
