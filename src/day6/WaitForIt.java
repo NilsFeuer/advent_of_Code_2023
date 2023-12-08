@@ -1,7 +1,10 @@
 package day6;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class WaitForIt {
 
@@ -64,7 +67,32 @@ public class WaitForIt {
         return totalNumberOfWaysToBeatRecord;
     }
 
+    public static int muchLongerRace(String input) {
+        String[] arr = input.split("\n");
+        String recordTime = arr[0].chars()
+                .filter(c -> Character.isDigit(c))
+                .mapToObj(c -> Character.getNumericValue(c))
+                .map(i -> String.valueOf(i))
+                .collect(Collectors.joining());
+        String distance = arr[1].chars()
+                .filter(c -> Character.isDigit(c))
+                .mapToObj(c -> Character.getNumericValue(c))
+                .map(i -> String.valueOf(i))
+                .collect(Collectors.joining());
+        int totalNumberOfWaysToBeatRecord = 0;
+
+        for (int time = 0; time < Integer.parseInt(recordTime); time++) {
+            Long remainingTime = Long.valueOf(recordTime) - time;
+            Long speed = (long)time;
+            if (Long.valueOf(distance) < speed * remainingTime) {
+                totalNumberOfWaysToBeatRecord++;
+            }
+        }
+        return totalNumberOfWaysToBeatRecord;
+    }
+
     public static void main(String[] args) {
-        System.out.println(waitForIt(input));
+//        System.out.println(waitForIt(input));
+        System.out.println(muchLongerRace(input));
     }
 }
