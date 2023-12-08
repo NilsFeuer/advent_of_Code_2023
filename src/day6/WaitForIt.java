@@ -82,7 +82,7 @@ public class WaitForIt {
 
         for (int time = 0; time < Integer.parseInt(recordTime); time++) {
             Long remainingTime = Long.valueOf(recordTime) - time;
-            Long speed = (long)time;
+            Long speed = (long) time;
             if (Long.valueOf(distance) < speed * remainingTime) {
                 totalNumberOfWaysToBeatRecord++;
             }
@@ -91,7 +91,7 @@ public class WaitForIt {
     }
 
     public static void main(String[] args) {
-//        System.out.println(waitForIt(input));
+        System.out.println(waitForIt(input));
         System.out.println(muchLongerRace(input));
     }
 }

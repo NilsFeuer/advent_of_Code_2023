@@ -206,7 +206,6 @@ public class GearRatiosPartOne {
             .664.598..
             """;
 
-    public static List<Character> symbols = new ArrayList<>();
     public static List<Long> partNumbers = new ArrayList<>();
 
     public static Long gearRatios(String input) {
@@ -220,7 +219,7 @@ public class GearRatiosPartOne {
                 }
             }
         }
-        return partNumbers.stream().reduce(0L, (a, b) -> a + b);
+        return partNumbers.stream().reduce(0L, Long::sum);
     }
 
     private static void findPartNumbersAround(String[] arr, int i, int j) {
