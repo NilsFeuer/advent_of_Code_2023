@@ -45,6 +45,7 @@ Of course, the actual engine schematic is much larger.
 *
 * */
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GearRatiosPartOne {
@@ -205,62 +206,100 @@ public class GearRatiosPartOne {
             .664.598..
             """;
 
-    public static List<Character> symbols = List.of('*', '#', '+', '$', '=', '/', '%', '@', '-');
+    public static List<Character> symbols = new ArrayList<>();
+    public static List<Long> partNumbers = new ArrayList<>();
 
-    public static int gearRatios(String input) {
+    public static Long gearRatios(String input) {
         String[] arr = input.split("\n");
-        int sum = 0;
-        boolean isPartNumber = false;
 
         for (int i = 0; i < arr.length; i++) {
-            String tmp = "";
             for (int j = 0; j < arr[i].length(); j++) {
-                if (i == 0 && Character.isDigit(arr[i].charAt(j))) {
-                    tmp += arr[i].charAt(j);
-                    isPartNumber = isPartNumber || checkLinesAround(arr[i + 1], j) || checkInline(arr[i], j);
-                } else if (i == arr.length - 1 && Character.isDigit(arr[i].charAt(j))) {
-                    tmp += arr[i].charAt(j);
-                    isPartNumber = isPartNumber || checkLinesAround(arr[i - 1], j) || checkInline(arr[i], j);
-                } else if (Character.isDigit(arr[i].charAt(j))) {
-                    tmp += arr[i].charAt(j);
-                    isPartNumber = isPartNumber || checkLinesAround(arr[i - 1], j) || checkLinesAround(arr[i + 1], j) || checkInline(arr[i], j);
-                }
-                if (arr[i].charAt(j) == '.' || symbols.contains(arr[i].charAt(j))) {
-                    if (isPartNumber) {
-                        if (tmp.isEmpty()) {
-                            tmp = "0";
-                        }
-                        sum += Integer.parseInt(tmp);
-                        tmp = "";
-                        isPartNumber = false;
-                    } else {
-                        tmp = "";
-                    }
+                char c = arr[i].charAt(j);
+                if (c != '.' && (!Character.isDigit(c))) {
+                    findPartNumbersAround(arr, i, j);
                 }
             }
         }
-        return sum;
+        return partNumbers.stream().reduce(0L, (a, b) -> a + b);
     }
 
+    private static void findPartNumbersAround(String[] arr, int i, int j) {
+        if (i > 0) {
+            String l = arr[i - 1];
+            searchTopOrBottom(l, j);
+        }
+        if (i < arr.length - 1) {
+            String l = arr[i + 1];
+            searchTopOrBottom(l, j);
+        }
+        searchLeftAndRight(arr[i], j);
+    }
 
-    //Unsolved
-    public static boolean checkLinesAround(String line, int position) {
-        if (position == 0) {
-            return symbols.contains(line.charAt(position)) || symbols.contains(line.charAt(position + 1));
-        } else if (position == line.length() - 1) {
-            return symbols.contains(line.charAt(position)) || symbols.contains(line.charAt(position - 1));
+    private static void searchTopOrBottom(String l, int j) {
+        char c = l.charAt(j);
+        if (Character.isDigit(c)) {
+            //search left
+            int left = j - 1;
+            while (left >= 0) {
+                char d = l.charAt(left);
+                if (Character.isDigit(d)) {
+                    left--;
+                } else {
+                    left++;
+                    break;
+                }
+            }
+            if (left < 0) {
+                left = 0;
+            }
+
+            //search right
+            int right = j + 1;
+            while (right < l.length()) {
+                char d = l.charAt(right);
+                if (Character.isDigit(d)) {
+                    right++;
+                } else {
+                    break;
+                }
+            }
+            partNumbers.add(Long.parseLong(l.substring(left, right)));
         } else {
-            return symbols.contains(line.charAt(position - 1)) || symbols.contains(line.charAt(position)) || symbols.contains(line.charAt(position + 1));
+            searchLeftAndRight(l, j);
         }
     }
 
-    public static boolean checkInline(String line, int position) {
-        if (position == 0) {
-            return symbols.contains(line.charAt(position + 1));
-        } else if (position == line.length() - 1) {
-            return symbols.contains(line.charAt(position - 1));
-        } else {
-            return symbols.contains(line.charAt(position - 1)) || symbols.contains(line.charAt(position + 1));
+    private static void searchLeftAndRight(String l, int j) {
+        //search left
+        int left = j - 1;
+        while (left >= 0) {
+            char d = l.charAt(left);
+            if (Character.isDigit(d)) {
+                left--;
+            } else {
+                left++;
+                break;
+            }
+        }
+        if (left < 0) {
+            left = 0;
+        }
+        if (left < j) {
+            partNumbers.add(Long.parseLong(l.substring(left, j)));
+        }
+        //serach right
+        int right = j + 1;
+        while (right < l.length()) {
+            char d = l.charAt(right);
+            if (Character.isDigit(d)) {
+                right++;
+            } else {
+                break;
+            }
+        }
+
+        if (right > j + 1) {
+            partNumbers.add(Long.parseLong(l.substring(j + 1, right)));
         }
     }
 
