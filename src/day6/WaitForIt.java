@@ -1,9 +1,7 @@
 package day6;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class WaitForIt {
@@ -67,6 +65,7 @@ public class WaitForIt {
         return totalNumberOfWaysToBeatRecord;
     }
 
+    //Part Two
     public static int muchLongerRace(String input) {
         String[] arr = input.split("\n");
         String recordTime = arr[0].chars()
