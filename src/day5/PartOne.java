@@ -96,6 +96,66 @@ public class PartOne {
         return location;
     }
 
+    public static Long lowestLocationPartTwo(String inputFile) {
+        List<String> input = InputUtil.readInput(inputFile);
+
+        List<List<Long>> seedToSoil = new ArrayList<>();
+        List<List<Long>> soilToFertilizer = new ArrayList<>();
+        List<List<Long>> fertilizerToWater = new ArrayList<>();
+        List<List<Long>> waterToLight = new ArrayList<>();
+        List<List<Long>> lightToTemperature = new ArrayList<>();
+        List<List<Long>> temperatureToHumidity = new ArrayList<>();
+        List<List<Long>> humidityToLocation = new ArrayList<>();
+
+        List<List<Long>> seedRanges = new ArrayList<>();
+        Long location = Long.MAX_VALUE;
+
+        //get Seeds
+        int length = 0;
+        List<Long> seeds = new ArrayList<>();
+        for (int j = 7; j < input.get(0).length(); j++) {
+            if (Character.isDigit(input.get(0).charAt(j))) {
+                length++;
+            }
+            if (input.get(0).charAt(j) == ' ' || j == input.get(0).length() - 1) {
+                if (j == input.get(0).length() - 1) {
+                    seeds.add(Long.parseLong(input.get(0).substring(j - length + 1, j + 1)));
+                } else {
+                    seeds.add(Long.parseLong(input.get(0).substring((j - length), j)));
+                }
+                length = 0;
+            }
+            if (seeds.size() == 2) {
+                seedRanges.add(seeds);
+                seeds = new ArrayList<>();
+            }
+        }
+
+        int index = 3;
+        index = fillLists(seedToSoil, input, index);
+        index = fillLists(soilToFertilizer, input, index);
+        index = fillLists(fertilizerToWater, input, index);
+        index = fillLists(waterToLight, input, index);
+        index = fillLists(lightToTemperature, input, index);
+        index = fillLists(temperatureToHumidity, input, index);
+        fillLists(humidityToLocation, input, index);
+
+        for (List<Long> seedRange : seedRanges) {
+            for (int i = 0; i < seedRange.get(1); i++) {
+                Long seed = seedRange.get(0) + i;
+                seed = transform(seedToSoil, seed);
+                seed = transform(soilToFertilizer, seed);
+                seed = transform(fertilizerToWater, seed);
+                seed = transform(waterToLight, seed);
+                seed = transform(lightToTemperature, seed);
+                seed = transform(temperatureToHumidity, seed);
+                location = Math.min(location, transform(humidityToLocation, seed));
+            }
+        }
+
+        return location;
+    }
+
     private static int fillLists(List<List<Long>> sourceToDest, List<String> input, int index) {
         int length = 0;
         for (int i = index; i < input.size(); i++) {
@@ -140,6 +200,7 @@ public class PartOne {
     }
 
     public static void main(String[] args) {
-        System.out.println(lowestLocation("day5.txt"));
+        System.out.println("Solution Part 1: " + lowestLocation("day5.txt"));
+        System.out.println("Solution Part 2: " + lowestLocationPartTwo("day5.txt"));
     }
 }
