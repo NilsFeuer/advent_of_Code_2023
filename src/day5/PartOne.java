@@ -201,6 +201,6 @@ public class PartOne {
 
     public static void main(String[] args) {
         System.out.println("Solution Part 1: " + lowestLocation("day5.txt"));
-        System.out.println("Solution Part 2: " + lowestLocationPartTwo("day5.txt"));
+//        System.out.println("Solution Part 2: " + lowestLocationPartTwo("day5.txt"));
     }
 }

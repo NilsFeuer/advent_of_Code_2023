@@ -13,7 +13,7 @@ public class InputUtil {
         List<String> lines = new ArrayList<>();
 
         try {
-            lines = Files.readAllLines(Paths.get("advent_of_Code_2023/src/inputFolder/" + inputFile), StandardCharsets.UTF_8);
+            lines = Files.readAllLines(Paths.get("workspace/src/inputFolder/" + inputFile), StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }
