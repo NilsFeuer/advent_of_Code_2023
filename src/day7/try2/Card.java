@@ -17,13 +17,13 @@ public class Card implements Comparable<Card> {
     int type = HIGH_CARD;
     int[] hand = new int[5];
     long bid;
-    int[] typeAmound = new int[15];
+    int[] typeAmount = new int[15];
     private long rank;
 
     public Card(String line) {
         int i = 0;
 
-        Arrays.fill(typeAmound, 0);
+        Arrays.fill(typeAmount, 0);
 
         String[] lineArr = line.split(" ");
         bid = Long.parseLong(lineArr[1]);
@@ -69,21 +69,21 @@ public class Card implements Comparable<Card> {
                     hand[i] = 2;
                     break;
             }
-            typeAmound[hand[i]]++;
+            typeAmount[hand[i]]++;
 
             i++;
         }
 
         List<Integer> amounts = new ArrayList<>();
-        for (int k = 1; k < typeAmound.length; k++) {
-            int v = typeAmound[k];
+        for (int k = 1; k < typeAmount.length; k++) {
+            int v = typeAmount[k];
             if (v == 0) {
                 continue;
             }
             amounts.add(v);
         }
 
-        if (typeAmound[0] == 5) {
+        if (typeAmount[0] == 5) {
             type = Card.FIVE_OF_A_KIND;
             return;
         }
@@ -93,7 +93,7 @@ public class Card implements Comparable<Card> {
 
         for (int j : amounts) {
             if (!usedTypeAmount) {
-                j += typeAmound[0];
+                j += typeAmount[0];
             }
             if (j == 5) {
                 type = Card.FIVE_OF_A_KIND;
