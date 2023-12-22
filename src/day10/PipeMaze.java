@@ -1,5 +1,6 @@
 package day10;
 
+import java.io.IOException;
 import java.util.List;
 import util.InputUtil;
 
@@ -48,17 +49,17 @@ public class PipeMaze {
             y++;
         }
 
-        Position northP = new Position(startX, startY);
+     /*   Position northP = new Position(startX, startY);
         northP.move(Position.NORTH);
         while (northP.isCanMove()) {
             northP = loopLength(northP, visit, map);
-        }
+        }*/
         Position southP = new Position(startX, startY);
         southP.move(Position.SOUTH);
         while (southP.isCanMove()) {
             southP = loopLength(southP, visit, map);
         }
-        Position westP = new Position(startX, startY);
+      /*  Position westP = new Position(startX, startY);
         westP.move(Position.WEST);
         while (westP.isCanMove()) {
             westP = loopLength(westP, visit, map);
@@ -67,14 +68,19 @@ public class PipeMaze {
         eastP.move(Position.EAST);
         while (eastP.isCanMove()) {
             eastP = loopLength(eastP, visit, map);
-        }
+        }*/
 
         visit[startY * SIZE + startX] = true;
 
-        System.out.println(northP.getCount());
+//        System.out.println(northP.getCount());
         System.out.println(southP.getCount());
-        System.out.println(westP.getCount());
-        System.out.println(eastP.getCount());
+//        System.out.println(westP.getCount());
+        try {
+            System.out.println(southP.getArea(visit));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+//        System.out.println(eastP.getCount());
     }
 
     private static Position loopLength(Position p, boolean[] visit, String[] map) {
