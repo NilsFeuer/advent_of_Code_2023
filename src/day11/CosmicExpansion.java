@@ -25,6 +25,8 @@ public class CosmicExpansion {
         List<String> input = InputUtil.readInput(inputFile);
         List<String> newInput = new ArrayList<>();
         List<Galaxy> galaxies = new ArrayList<>();
+        List<Integer> rowsWithoutGalaxies = new ArrayList<>();
+        List<Integer> columnsWithoutGalaxies = new ArrayList<>();
 
         // find rows without galaxies
         int index = 0;
@@ -36,10 +38,11 @@ public class CosmicExpansion {
                     break;
                 }
             }
-            newInput.add(index, line);
+//            newInput.add(index, line);
             if (!hasGalaxy) {
-                newInput.add(index + 1, ".".repeat(line.length()));
-                index++;
+//                newInput.add(index + 1, ".".repeat(line.length()));
+//                index++;
+                rowsWithoutGalaxies.add(index);
             }
             index++;
         }
@@ -55,14 +58,15 @@ public class CosmicExpansion {
                 }
             }
             if (!hasGalaxy) {
-                addColumn(newInput, i + tmp);
-                tmp++;
+//                addColumn(newInput, i + tmp);
+//                tmp++;
+                columnsWithoutGalaxies.add(i);
             }
         }
 
         int y = 0;
         int number = 1;
-        for (String line : newInput) {
+        for (String line : input) {
             for (int x = 0; x < line.length(); x++) {
                 if (line.charAt(x) == '#') {
                     galaxies.add(new Galaxy(number, x, y));
@@ -77,13 +81,43 @@ public class CosmicExpansion {
                 if (galaxy.equals(galaxies.get(i))) {
                     continue;
                 }
-                val += galaxy.getX() > galaxies.get(i).getX() ? galaxy.getX() - galaxies.get(i).getX() : galaxies.get(i).getX() - galaxy.getX();
-                val += galaxy.getY() > galaxies.get(i).getY() ? galaxy.getY() - galaxies.get(i).getY() : galaxies.get(i).getY() - galaxy.getY();
+                int difX;
+                int x;
+                if (galaxy.getX() > galaxies.get(i).getX()) {
+                    difX = galaxy.getX() - galaxies.get(i).getX();
+                    x = timesContainsInList(rowsWithoutGalaxies, galaxies.get(i).getX(), galaxy.getX());
+                } else {
+                    difX = galaxies.get(i).getX() - galaxy.getX();
+                    x = timesContainsInList(rowsWithoutGalaxies, galaxy.getX(), galaxies.get(i).getX());
+                }
+
+                int difY;
+                int y2;
+                if (galaxy.getY() > galaxies.get(i).getY()) {
+                    difY = galaxy.getY() - galaxies.get(i).getY();
+                    y2 = timesContainsInList(columnsWithoutGalaxies, galaxies.get(i).getY(), galaxy.getY());
+                } else {
+                    difY = galaxies.get(i).getY() - galaxy.getY();
+                    y2= timesContainsInList(columnsWithoutGalaxies, galaxy.getY(), galaxies.get(i).getY());
+                }
+                val += difX + (1000000 * (x == 0 ? x : x - 1)) + difY + (1000000 * (y2 == 0 ? 0 : y2 - 1));
             }
         }
 
 
         System.out.println("Solution: " + (val / 2));
+    }
+
+    private static int timesContainsInList(List<Integer> list, int start, int end) {
+        int count = 0;
+
+        for (int i = start; i <= end; i++) {
+            if (list.contains(i)) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     private static void addColumn(List<String> input, int index) {
@@ -98,5 +132,10 @@ public class CosmicExpansion {
 
     public static void main(String[] args) {
         paths("day11.txt");
+
+        // 379923889949
+        // 184118269864
+        // 230532269864
+
     }
 }
