@@ -17,6 +17,8 @@ public class Beam {
         this.direction = direction;
     }
 
+    //test
+
     public void move(int direction) {
         if (direction == NORTH) {
             this.direction = NORTH;
